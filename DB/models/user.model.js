@@ -12,6 +12,7 @@ const userSchema = new Schema(
     gender: { type: String, enum:['Male' , 'Female']  },
     status: { type: String, enum:['active' , 'not_active']  },
     role: { type: String, default:'user',  enum:['admin' , 'user']  },
+    sendCode: { type: String, default: null }
 }, {
   timestamps: true,
 });
