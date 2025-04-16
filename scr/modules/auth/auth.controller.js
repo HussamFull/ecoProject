@@ -2,8 +2,7 @@ import userModel from "../../../DB/models/user.model.js";
 import bcrypt from "bcryptjs";
 import { sendEmail } from "../../utils/sendEmail.js";
 import jwt from "jsonwebtoken";
-import {nanoid ,customAlphabet} from "nanoid";
-
+import { nanoid, customAlphabet } from "nanoid";
 
 // register
 export const register = async (req, res, next) => {
@@ -47,20 +46,66 @@ export const register = async (req, res, next) => {
     .status(201)
     .json({ message: "User registered successfully", user: createdUser });
 };
+////////////////////////////////////////////////////////////
+// confirmEmail (الحل البديل)
+export const confirmEmail = async (req, res) => {
+    const { token } = req.params;
+    try {
+      const decoded = jwt.verify(token, process.env.CONFIEMEMAILSIGNAL);
+  
+      // البحث عن المستخدم بناءً على البريد الإلكتروني المستخرج من الرمز
+      const user = await userModel.findOne({ email: decoded.email });
+  
+      // التحقق مما إذا تم العثور على المستخدم
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      // التحقق مما إذا كان البريد الإلكتروني قد تم تأكيده بالفعل
+      if (user.confirmEmail === true) {
+        return res.status(400).json({ message: "Email already confirmed" });
+      }
+  
+      // إذا لم يتم تأكيد البريد الإلكتروني، قم بتحديث الحالة
+      const updatedUser = await userModel.findOneAndUpdate(
+        { email: decoded.email },
+        { confirmEmail: true },
+        { new: true }
+      );
+  
+      if (updatedUser) {
+        return res.status(200).json({ message:"Email confirmed successfully" });
+      } else {
+        // في حال فشل التحديث (سيناريو نادر)
+        return res.status(500).json({ message: "Failed to update email confirmation status" });
+      }
+  
+    } catch (error) {
+      console.error("Error confirming email:", error);
+      if (error.name === 'TokenExpiredError') {
+        return res.status(400).json({ message: "The email confirmation link has expired." });
+      } else if (error.name === 'JsonWebTokenError') {
+        return res.status(400).json({ message: "Invalid email confirmation code" });
+      }
+      return res.status(500).json({ message: "An error occurred while confirming the email." });
+    }
+  };
+
+
 
 // confirmEmail
-export const confirmEmail = async (req, res) => {
-  const { token } = req.params;
-  const decoded = jwt.verify(token, process.env.CONFIEMEMAILSIGNAL);
+//export const confirmEmail = async (req, res) => {
+//const { token } = req.params;
+//  const decoded = jwt.verify(token, process.env.CONFIEMEMAILSIGNAL);
 
-  await userModel.findOneAndUpdate(
-    { email: decoded.email },
-    { confirmEmail: true }
-  );
+//  await userModel.findOneAndUpdate(
+//    { email: decoded.email },
+//    { confirmEmail: true }
+//  );
 
-  return res.status(201).json({ message: "Email confirmed successfully" });
-};
-
+//  return res.status(201).json({ message: "Email confirmed successfully" });
+//};
+/////////////////////////////////////////////////
 // loginUser
 
 export const login = async (req, res) => {
@@ -98,15 +143,15 @@ export const login = async (req, res) => {
 
 // sendCode for reset password
 // 1-  sendCode
-export const sendCode = async (req,res)=>{
-     const { email } = req.body;
-     const code = customAlphabet('1234567890abcdefABCDEF', 4)();
+export const sendCode = async (req, res) => {
+  const { email } = req.body;
+  const code = customAlphabet("1234567890abcdefABCDEF", 4)();
 
-        // Check if user exists
+  // Check if user exists
 
-        const user = await userModel.findOneAndUpdate({ email } , { sendCode: code });
+  const user = await userModel.findOneAndUpdate({ email }, { sendCode: code });
 
-     const html = `
+  const html = `
      <div>
         <h1>Welcome to T-Shop</h1>
         <h2>Reset Password</h2>
@@ -116,34 +161,34 @@ export const sendCode = async (req,res)=>{
         </div>
         `;
 
-        await sendEmail(email, "Reset Password", html);
+  await sendEmail(email, "Reset Password", html);
 
-     return res.status(200).json({ message: "Code sent successfully" });
-}
+  return res.status(200).json({ message: "Code sent successfully" });
+};
 
 // 2- verifyCode und resetPassword
-export const resetPassword = async (req,res)=>{
+export const resetPassword = async (req, res) => {
+  const { email, code, password } = req.body;
+  // Check if user exists
+  const user = await userModel.findOne({ email });
+  if (!user) {
+    return res
+      .status(400)
+      .json({ message: "Invalid email -- not register Account " });
+  }
+  // Check if code is correct
+  if (user.sendCode != code) {
+    return res.status(400).json({ message: "Invalid  code" });
+  }
+  // hash password
+  const hashedPassword = await bcrypt.hash(
+    password,
+    parseInt(process.env.SALT_ROUND)
+  );
+  // Update password and remove sendCode
+  user.password = hashedPassword;
+  user.sendCode = null;
+  await user.save();
 
-    const { email , code , password } = req.body;
-    // Check if user exists
-    const user = await userModel.findOne({ email });
-    if (!user) {
-        return res.status(400).json({ message: "Invalid email -- not register Account " });
-      }
-      // Check if code is correct
-      if (user.sendCode != code) {
-        return res.status(400).json({ message: "Invalid  code" });
-      }
-      // hash password
-      const hashedPassword = await bcrypt.hash(
-        password,
-        parseInt(process.env.SALT_ROUND)
-      );
-      // Update password and remove sendCode
-      user.password = hashedPassword;
-      user.sendCode= null ;
-        await user.save();
-
-
-      return res.status(200).json({ message: "Password reset successfully" });
-}
+  return res.status(200).json({ message: "Password reset successfully" });
+};
