@@ -5,7 +5,7 @@ const userSchema = new Schema(
     userName: { type: String, required: true, min:3, max: 20 },
     email: { type: String, required: true, unique: true },
     confirmEmail: { type: Boolean, default: false },
-    password: { type: String,default: false },
+    password: { type: String, required: true, min:3 },
     image: { type: Object },
     address: { type: String },
     phone: { type: String },

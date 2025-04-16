@@ -4,6 +4,7 @@ const router = Router();
 
 
 router.post('/register', controller.register);
+router.get('/confirmEmail/:token', controller.confirmEmail);
 //router.post("/login", controller.loginUser);
 
 export default router;
