@@ -6,6 +6,7 @@ const router = Router();
 
 router.post('/',auth(['admin']), controller.create);
 router.get('/',auth(['admin']), controller.get);
+router.get('/:id', controller.details);
 router.get('/active', controller.getActive);
 router.put('/:id',auth(['admin']), controller.update);
 router.delete('/:id',auth(['admin']), controller.remove);
