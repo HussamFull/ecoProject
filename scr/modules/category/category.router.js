@@ -7,6 +7,7 @@ const router = Router();
 router.post('/',auth(['admin']), controller.create);
 router.get('/',auth(['admin']), controller.get);
 router.get('/active', controller.getActive);
+router.put('/:id',auth(['admin']), controller.update);
 router.delete('/:id',auth(['admin']), controller.remove);
 
 export default router;
