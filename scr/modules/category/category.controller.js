@@ -34,8 +34,6 @@ export const details = async (req, res) => {
     return res.status(200).json({message: "success by details" , category });
 }
 
-
-
  // category update
 export const update = async (req, res) => {
     const { id } = req.params;

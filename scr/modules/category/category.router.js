@@ -3,7 +3,7 @@ import * as controller from "./category.controller.js";
 import { auth } from "../../middleware/auth.js";
 const router = Router();
 
-
+// Routes 
 router.post('/',auth(['admin']), controller.create);
 router.get('/',auth(['admin']), controller.get);
 router.get('/:id', controller.details);
