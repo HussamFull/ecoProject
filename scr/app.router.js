@@ -3,12 +3,14 @@ import cors from 'cors';
 import connectDb from '../DB/connection.js';
 import authRouter from './modules/auth/auth.router.js';
 import categoryRouter from './modules/category/category.router.js';
+import productRouter from './modules/product/product.router.js';
+
 
 const initApp = async(app,express) => {
     app.use(express.json());
     app.use(cors());
     connectDb();
-
+    
   
 
     
@@ -23,6 +25,22 @@ const initApp = async(app,express) => {
 
     // import categoryRoutes
    app.use('/categories', categoryRouter);
+
+
+    // import productRoutes
+    app.use('/products', productRouter);
+
+    // import orderRoutes
+    //app.use('/orders', orderRouter);
+
+    // import userRoutes
+    //app.use('/users', userRouter);
+
+    // import cartRoutes
+    //app.use('/cart', cartRouter);
+
+    // import paymentRoutes
+    //app.use('/payment', paymentRouter);
   
    
   

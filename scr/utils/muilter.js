@@ -1,8 +1,9 @@
-import multer from "multer";
+import multer   from 'multer';
+import path from "path";
 
 export const fileValidation = {
   image: ["image/png", "image/jpg", "image/jpeg", "image/gif", "image/webp"],
-  video: ["video/mp4", "video/mkv", "video/avi", "video/mov"],
+  //video: ["video/mp4", "video/mkv", "video/avi", "video/mov"],
   pdf: ["application/pdf", "application/x-pdf"],
   //doc: ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
   excel: [

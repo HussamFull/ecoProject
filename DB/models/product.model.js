@@ -15,11 +15,8 @@ const productSchema = new Schema(
     price: { type: Number, required: true, min: 0 },
     discont: { type: Number, default: 0 },
     slug: { type: String, required: true },
-    image: { type: Object , required: true },
-    subImages: [{
-         type: Object
-         
-        }],
+    mainImage: { type: Object , required: true },
+    subImages: [{ type: Object}],
     categoryId: { type: Types.ObjectId, ref: "Category" },
     status: { type: String, default: "active", enum: ["active", "not_active"] },
     role: { type: String, default: "user", enum: ["admin", "user"] },
