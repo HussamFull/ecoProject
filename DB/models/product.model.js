@@ -15,10 +15,10 @@ const productSchema = new Schema(
     price: { type: Number, required: true, min: 0 },
     discont: { type: Number, default: 0 },
     slug: { type: String, required: true },
-    image: { type: Object },
+    image: { type: Object , required: true },
     subImages: [{
-         type: Object, 
-         required: true 
+         type: Object
+         
         }],
     categoryId: { type: Types.ObjectId, ref: "Category" },
     status: { type: String, default: "active", enum: ["active", "not_active"] },

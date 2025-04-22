@@ -1,7 +1,8 @@
 import express from 'express';
 import initApp from './scr/app.router.js';
-import dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
+//import dotenv from 'dotenv';
+//dotenv.config();
 
 
 const app = express();
