@@ -63,3 +63,29 @@ export const getDetails = async (req, res) => {
   }
   return res.status(200).json({ message: "success get product details", product });
 };
+
+
+// delete product
+export const remove = async (req, res) => {
+  const { id } = req.params;
+  const product = await productModel.findByIdAndDelete(id);
+
+  if (!product) {
+    return res.status(404).json({ message: "product not found" });
+  }
+
+  
+  await cloudinary.uploader.destroy(product.mainImage.public_id, {
+    folder: `${process.env.APP_NAME}/products/${product.name}`,
+  });
+  
+  // delete subImages
+  if (product.subImages) {
+    for (const image of product.subImages) {
+      await cloudinary.uploader.destroy(image.public_id, {
+        folder: `${process.env.APP_NAME}/products/${product.name}/subImages`,
+      });
+    }
+  }
+  return res.status(200).json({ message: "success deleted product" });
+};

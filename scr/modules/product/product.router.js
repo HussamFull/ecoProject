@@ -16,6 +16,7 @@ router.post('/',auth(['admin']),fileUpload(fileValidation.image).fields([
 router.get('/',auth(['admin']), controller.get);
 router.get('/active', controller.getActive);
 router.get('/:id', controller.getDetails);
+router.delete('/:id',auth(['admin']), controller.remove);
 
 
 export default router;
