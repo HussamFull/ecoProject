@@ -4,6 +4,7 @@ import connectDb from '../DB/connection.js';
 import authRouter from './modules/auth/auth.router.js';
 import categoryRouter from './modules/category/category.router.js';
 import productRouter from './modules/product/product.router.js';
+import couponRouter from './modules/coupon/coupon.router.js';
 
 
 const initApp = async(app,express) => {
@@ -29,6 +30,9 @@ const initApp = async(app,express) => {
 
     // import productRoutes
     app.use('/products', productRouter);
+
+    // import couponRoutes
+    app.use('/coupons', couponRouter);
 
     // import orderRoutes
     //app.use('/orders', orderRouter);

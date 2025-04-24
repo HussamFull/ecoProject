@@ -73,8 +73,7 @@ export const remove = async (req, res) => {
   if (!product) {
     return res.status(404).json({ message: "product not found" });
   }
-
-  
+  // delete mainImage
   await cloudinary.uploader.destroy(product.mainImage.public_id, {
     folder: `${process.env.APP_NAME}/products/${product.name}`,
   });
@@ -89,3 +88,8 @@ export const remove = async (req, res) => {
   }
   return res.status(200).json({ message: "success deleted product" });
 };
+
+// update product
+
+
+
