@@ -5,6 +5,7 @@ import authRouter from './modules/auth/auth.router.js';
 import categoryRouter from './modules/category/category.router.js';
 import productRouter from './modules/product/product.router.js';
 import couponRouter from './modules/coupon/coupon.router.js';
+import cartRouter from './modules/cart/cart.router.js';
 
 
 const initApp = async(app,express) => {
@@ -41,7 +42,7 @@ const initApp = async(app,express) => {
     //app.use('/users', userRouter);
 
     // import cartRoutes
-    //app.use('/cart', cartRouter);
+    app.use('/carts', cartRouter);
 
     // import paymentRoutes
     //app.use('/payment', paymentRouter);
