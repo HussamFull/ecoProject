@@ -13,7 +13,12 @@ export const addToCart = async (req, res) => {
         userId,
         products: [{ productId }], // يجب أن يكون products عبارة عن مصفوفة من الكائنات
       });
-      return res.status(201).json({ message: "Product added to cart successfully!", cart: newCart });
+      return res
+        .status(201)
+        .json({
+          message: "Product added to cart successfully!",
+          cart: newCart,
+        });
     }
 
     // تحقق مما إذا كان المنتج موجودًا بالفعل في سلة المشتريات
@@ -22,7 +27,9 @@ export const addToCart = async (req, res) => {
     );
 
     if (productExists) {
-      return res.status(409).json({ message: "Product is already in the cart!"});
+      return res
+        .status(409)
+        .json({ message: "Product is already in the cart!" });
     }
 
     // إذا لم يكن المنتج موجودًا، قم بإضافته إلى سلة المشتريات
@@ -31,10 +38,17 @@ export const addToCart = async (req, res) => {
 
     return res
       .status(201) // استخدام 200 OK للتحديث الناجح
-      .json({ message: "Product added to the shopping cart successfully!", cart });
+      .json({
+        message: "Product added to the shopping cart successfully!",
+        cart,
+      });
   } catch (error) {
-    console.error("An error occurred while adding the product to the shopping cart:", error);
-    return res.status(500).json({ message: "An internal server error occurred."
- });
+    console.error(
+      "An error occurred while adding the product to the shopping cart:",
+      error
+    );
+    return res
+      .status(500)
+      .json({ message: "An internal server error occurred." });
   }
 };
