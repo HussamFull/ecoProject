@@ -5,6 +5,10 @@ const router = Router();
 
 // Routes 
 router.post('/',auth(['user']), controller.create);
+router.get('/', auth(['user']), controller.getUserOrders);
+router.get('/:status', auth(['admin']), controller.getOrdersByStatus);
+
+
 
 
 

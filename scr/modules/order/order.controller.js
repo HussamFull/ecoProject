@@ -4,6 +4,8 @@ import orderModel from "../../../DB/models/order.model.js";
 import productModel from "../../../DB/models/product.model.js";
 import userModel from "../../../DB/models/user.model.js";
 
+
+// create order
 export const create = async (req, res) => {
   const { couponName, address, phoneNumber } = req.body; // استخلاص address و phoneNumber من req.body مباشرة
 
@@ -95,4 +97,22 @@ export const create = async (req, res) => {
       return res.status(201).json({ message: "Order is Added !" , order });
 
 
+};
+
+// get User orders
+export const getUserOrders = async (req, res) => {
+  const orders = await orderModel.find({ UserId: req.id }).populate("Products.productId", "name price mainImage").select("-__v -createdAt -updatedAt -UserId -Products._id");
+  if (!orders) {
+    return res.status(404).json({ message: "Orders not found!" });
+  }
+  return res.status(200).json({ message: "success get all orders", orders });
+};
+// get getOrdersByStatus 
+export const getOrdersByStatus = async (req, res) => {
+  const { status } = req.params;
+  const orders = await orderModel.find({ status }).populate("Products.productId", "name price mainImage").select("-__v -createdAt -updatedAt -UserId -Products._id");
+  if (!orders) {
+    return res.status(404).json({ message: "Orders not found!" });
+  }
+  return res.status(200).json({ message: "success get all orders", orders });
 };
