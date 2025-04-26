@@ -14,6 +14,7 @@ const productSchema = new Schema(
     stock: { type: Number, default: 1 },
     price: { type: Number, required: true, min: 0 },
     discont: { type: Number, default: 0 },
+    priceAfterDiscont: { type: Number },
     slug: { type: String, required: true },
     mainImage: { type: Object , required: true },
     subImages: [{ type: Object}],

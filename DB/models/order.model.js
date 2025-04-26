@@ -1,4 +1,6 @@
 import mongoose, { Schema, model ,  Types} from "mongoose";
+import name from "../../DB/models/coupon.model.js";
+
 
 const orderSchema = new Schema(
   {
@@ -34,7 +36,9 @@ const orderSchema = new Schema(
       },
     ],
     couponName: {
-      type: Name,
+      type: String,
+      
+      
     },
 
     finalPrice: {
